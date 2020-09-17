@@ -22,9 +22,18 @@ router.post('/', async(req, res) => {
     // console.log(req.body);
     const { title, description } = req.body;
     const task = new Task({ title, description });
-    await task.save();
-    res.json({
-        status: '200'
+    await task.save((err, tas) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+        }
+
+        res.json({
+            ok: true,
+            data: tas
+        });
     });
 });
 
